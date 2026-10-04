@@ -1274,25 +1274,38 @@ Layer 2 incorporates small area estimation (SAE) models anchored to NHMS Sabah, 
    $$S_{\text{hiv}} = \text{norm\_hiv} \times 5.0 \in [0, 5.0]$$
         """)
 
-    with tab3:
-        st.markdown(r"""
-#### Complete Objective Function ($100.0\%$ Total Scale)
+with tab3:
+    st.markdown("### Model Formulation")
+    st.markdown(
+        r"The overall continuous priority score for district $d$ is the strict sum of Layer 1 and Layer 2:"
+    )
 
-The overall continuous priority score for district $d$ is the strict sum of Layer 1 and Layer 2:
+    st.latex(
+        r"""
+        S_{\text{final}}(d) = S_{\text{compound}}(d) + \sum_{k \in \{\text{lag}, \text{dm}, \text{weather}, \text{smoking}, \text{hiv}\}} S_k(d)
+        """
+    )
 
-$$S_{\text{final}}(d) = S_{\text{compound}}(d) + \sum_{k \in \{\text{lag}, \text{dm}, \text{weather}, \text{smoking}, \text{hiv}\}} S_k(d)$$
+    st.markdown("#### Expanded Formulation")
 
-Expanded LaTeX Formulation:
-$$\begin{aligned}
-S_{\text{final}}(d) &= \underbrace{15.0 \cdot G(d) + 15.0 \cdot I(d) + 30.0 \cdot [G(d) \cdot I(d)]}_{\text{Layer 1: Compound Structural Exposure (60.0\%)}} \\
-&+ \underbrace{20.0 \cdot \left(\frac{\text{delay}(d) - 25}{80}\right)}_{\text{Diagnostic Latency (20.0\%)}} + \underbrace{5.0 \cdot \left(\frac{\text{DM\%}(d) - 10}{8}\right)}_{\text{Diabetes Mellitus (5.0\%)}} \\
-&+ \underbrace{5.0 \cdot \left(\frac{\text{road\_risk}(d)}{100}\right)}_{\text{Road Passability (5.0\%)}} + \underbrace{5.0 \cdot \left(\frac{\text{smoke\%}(d) - 18}{14}\right)}_{\text{Smoking Prevalence (5.0\%)}} + \underbrace{5.0 \cdot \left(\frac{\text{HIV\%}(d)}{0.60}\right)}_{\text{HIV / Immunosuppression (5.0\%)}}
-\end{aligned}$$
+    st.latex(
+        r"""
+        \begin{aligned}
+        S_{\text{final}}(d) &= \underbrace{15.0 \cdot G(d) + 15.0 \cdot I(d) + 30.0 \cdot [G(d) \cdot I(d)]}_{\text{Layer 1: Compound Structural Exposure (60.0\%)}} \\
+        &\quad + \underbrace{20.0 \cdot \left(\frac{\text{delay}(d) - 25}{80}\right)}_{\text{Diagnostic Latency (20.0\%)}} + \underbrace{5.0 \cdot \left(\frac{\text{DM}(d) - 10}{8}\right)}_{\text{Diabetes Mellitus (5.0\%)}} \\
+        &\quad + \underbrace{5.0 \cdot \left(\frac{\text{road\_risk}(d)}{100}\right)}_{\text{Road Passability (5.0\%)}} + \underbrace{5.0 \cdot \left(\frac{\text{smoke}(d) - 18}{14}\right)}_{\text{Smoking Prevalence (5.0\%)}} \\
+        &\quad + \underbrace{5.0 \cdot \left(\frac{\text{HIV}(d)}{0.60}\right)}_{\text{HIV / Immunosuppression (5.0\%)}}
+        \end{aligned}
+        """
+    )
 
-$$\text{Domain: } S_{\text{final}}(d) \in [0.0, 100.0] \quad \forall d \in \{1, \dots, 27\}$$
-        """)
+    st.latex(
+        r"""
+        \text{Domain: } S_{\text{final}}(d) \in [0.0, 100.0] \quad \forall d \in \{1, \dots, 27\}
+        """
+    )
 
-    with tab4:
+with tab4:
         st.markdown(r"""
 #### Calibration Parameters & Evidence Justification
 

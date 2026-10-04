@@ -1,5 +1,7 @@
 # Sabah TB Detection-Gap Dashboard
 
+##To Run: py -m streamlit run app.py
+
 **Public Health & Epidemiology track.** Sabah has ~10% of Malaysia's population but ~20% of its TB
 notifications (Goroh et al. 2020). The literature points to delayed care-seeking and poor access, so a
 *low* notification rate in a remote district may mean **missed** cases, not absent ones. This project
