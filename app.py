@@ -56,6 +56,55 @@ STYLE = """
 html, body, [class*="css"] { font-family: 'Inter', sans-serif; }
 .stApp { background: linear-gradient(135deg, #0a0e1a 0%, #0d1421 50%, #0a1628 100%); }
 
+/* Eliminate default Streamlit vertical dead space */
+.block-container {
+    padding-top: 3.8rem !important;
+    padding-bottom: 1.5rem !important;
+    max-width: 96% !important;
+}
+
+/* Glassmorphism Command Center Card */
+.stat-card {
+    background: rgba(18, 26, 38, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 8px;
+    padding: 10px 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+    transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.stat-card:hover {
+    border-color: rgba(56, 189, 248, 0.3);
+}
+
+.stat-label {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #94a3b8;
+    margin-bottom: 2px;
+}
+.stat-value {
+    font-size: 1.35rem;
+    font-weight: 800;
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    color: #f8fafc;
+    line-height: 1.2;
+}
+.stat-badge {
+    font-size: 0.65rem;
+    padding: 2px 6px;
+    border-radius: 4px;
+    display: inline-block;
+    font-weight: 600;
+    margin-top: 4px;
+}
+.badge-red { background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.25); }
+.badge-blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.25); }
+.badge-amber { background: rgba(245, 158, 11, 0.15); color: #fbbf24; border: 1px solid rgba(245, 158, 11, 0.25); }
+.badge-green { background: rgba(34, 197, 94, 0.15); color: #4ade80; border: 1px solid rgba(34, 197, 94, 0.25); }
+
 [data-testid="stSidebar"] {
     background: linear-gradient(180deg, #0d1b2a 0%, #0a1628 100%);
     border-right: 1px solid rgba(0,200,180,0.15);
@@ -673,20 +722,20 @@ with st.sidebar:
     st.markdown("### 📌 Priority Snapshot")
     st.markdown(
         f"""
-        <div class="sidebar-kpi">
-            <div class="sidebar-kpi-title">#1 Mobile Unit Target</div>
-            <div class="sidebar-kpi-val" style="color:#ef4444;">{top_dist['district']}</div>
-            <div class="sidebar-kpi-sub">Priority Score: {top_dist['final_priority_score']:.1f}/100</div>
+        <div class="stat-card" style="margin-bottom:8px;">
+            <div class="stat-label">#1 Mobile Unit Target</div>
+            <div class="stat-value" style="color:#f87171; font-size:1.15rem;">{top_dist['district']}</div>
+            <span class="stat-badge badge-red">Priority: {top_dist['final_priority_score']:.1f}/100</span>
         </div>
-        <div class="sidebar-kpi">
-            <div class="sidebar-kpi-title">Mean TB Diagnostic Delay</div>
-            <div class="sidebar-kpi-val" style="color:#f59e0b;">{mean_delay:.0f} Days</div>
-            <div class="sidebar-kpi-sub">Average across 27 districts</div>
+        <div class="stat-card" style="margin-bottom:8px;">
+            <div class="stat-label">Mean TB Diagnostic Delay</div>
+            <div class="stat-value" style="color:#fbbf24; font-size:1.15rem;">{mean_delay:.0f} DAYS</div>
+            <span class="stat-badge badge-amber">Sabah Average Latency</span>
         </div>
-        <div class="sidebar-kpi">
-            <div class="sidebar-kpi-title">Active Health Infrastructure</div>
-            <div class="sidebar-kpi-val" style="color:#38bdf8;">{len(hospitals)} Hospitals</div>
-            <div class="sidebar-kpi-sub">{len(clinics)} Primary Clinics Registered</div>
+        <div class="stat-card">
+            <div class="stat-label">Health Infrastructure</div>
+            <div class="stat-value" style="color:#38bdf8; font-size:1.15rem;">{len(hospitals)} HUBS</div>
+            <span class="stat-badge badge-blue">{len(clinics)} Registered Clinics</span>
         </div>
         """,
         unsafe_allow_html=True,
@@ -694,94 +743,121 @@ with st.sidebar:
     st.caption("Data: MOH Malaysia · OpenDOSM · NHMS · METMalaysia")
 
 # ---------------------------------------------------------------------------
-# HEADER
+# COMMAND CENTER HEADER
 # ---------------------------------------------------------------------------
 st.markdown(
     """
-    <h1 style="
-        background: linear-gradient(90deg, #00c8b4 0%, #0096c7 60%, #7ecfdf 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-size: 2.2rem; font-weight: 800; margin-bottom: 0.15rem;
-    ">🚐 Sabah TB Mobile Clinic Prioritization Engine</h1>
-    <p style="color:#64748b; font-size:0.95rem; margin-top:0;">
-        Full 7-Metric Model (100% Total Weight) &nbsp;&middot;&nbsp; Layer 1: Compound Structural Exposure (60%) &nbsp;&middot;&nbsp; Layer 2: Clinical & Operational Modifiers (40%)
-    </p>
-    <hr style="border-color:rgba(0,200,180,0.2); margin:0.8rem 0 1.2rem;">
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-bottom:0.75rem; padding-bottom:0.5rem; border-bottom:1px solid rgba(0,200,180,0.2);">
+        <div>
+            <h1 style="
+                background: linear-gradient(90deg, #00c8b4 0%, #0096c7 50%, #7ecfdf 100%);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                font-size: 1.85rem; font-weight: 800; margin:0; padding:0; letter-spacing:-0.02em;
+            ">🚐 Sabah TB Mobile Clinic Dispatch Command Center</h1>
+            <p style="color:#64748b; font-size:0.82rem; margin:3px 0 0 0;">
+                7-Metric Multi-Criteria Operational Prioritization Engine &nbsp;|&nbsp; 
+                Layer 1: Structural Exposure (60%) &nbsp;|&nbsp; 
+                Layer 2: Clinical & Operational Modifiers (40%)
+            </p>
+        </div>
+        <div style="text-align:right;">
+            <span style="background:rgba(0,200,180,0.12); border:1px solid rgba(0,200,180,0.3); color:#00c8b4; border-radius:20px; padding:3px 12px; font-size:0.75rem; font-weight:600; letter-spacing:0.04em;">
+                ● LIVE TELEMETRY ACTIVE
+            </span>
+        </div>
+    </div>
     """,
     unsafe_allow_html=True,
 )
 
 # ---------------------------------------------------------------------------
-# TOP METRIC KPI CARDS (2 Rows)
+# HIGH-DENSITY OPERATIONAL METRIC ROW (6 STAT-CARDS)
 # ---------------------------------------------------------------------------
 bottom_dist = df.iloc[-1]
 max_geo_dist = df.sort_values("est_travel_time_min", ascending=False).iloc[0]
 critical_count = (df["final_priority_score"] > 60.0).sum()
 
-r1c1, r1c2, r1c3 = st.columns(3)
-with r1c1:
-    st.markdown('<div class="metric-compound">', unsafe_allow_html=True)
-    st.metric(
-        "🔴 #1 Priority Mobile Unit Target",
-        top_dist["district"],
-        (
-            f"Score {top_dist['final_priority_score']:.1f}/100 "
-            f"(L1: {top_dist['layer1_compound_score']:.1f} + L2: {top_dist['layer2_modifiers_score']:.1f})"
-        ),
-        delta_color="inverse",
-    )
-    st.markdown("</div>", unsafe_allow_html=True)
+c1, c2, c3, c4, c5, c6 = st.columns(6)
 
-with r1c2:
-    st.metric(
-        "⏱ Mean TB Diagnostic Latency",
-        f"{mean_delay:.1f} Days",
-        f"Range: {df['delay_days'].min():.0f} to {df['delay_days'].max():.0f} days to GeneXpert/CXR",
-        delta_color="inverse",
+with c1:
+    st.markdown(
+        f"""
+        <div class="stat-card">
+            <div class="stat-label">🎯 #1 Target District</div>
+            <div class="stat-value" style="color:#f87171;">{top_dist['district']}</div>
+            <span class="stat-badge badge-red">{top_dist['final_priority_score']:.1f}/100 · L1:{top_dist['layer1_compound_score']:.0f} L2:{top_dist['layer2_modifiers_score']:.0f}</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-with r1c3:
-    st.metric(
-        "💰 State Median Household Income",
-        f"RM {state_median:,.0f}",
-        f"Urban-Rural Disparity Ratio: {disparity_ratio:.1f}×",
+with c2:
+    st.markdown(
+        f"""
+        <div class="stat-card">
+            <div class="stat-label">⏱ Mean TB Delay</div>
+            <div class="stat-value" style="color:#fbbf24;">{mean_delay:.0f} <span style="font-size:0.82rem; font-weight:600;">DAYS</span></div>
+            <span class="stat-badge badge-amber">{df['delay_days'].min():.0f}–{df['delay_days'].max():.0f}d Regional Range</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-st.markdown("<br>", unsafe_allow_html=True)
-
-r2c1, r2c2, r2c3 = st.columns(3)
-with r2c1:
-    st.metric(
-        "✅ Lowest Priority District",
-        bottom_dist["district"],
-        f"Score {bottom_dist['final_priority_score']:.1f}/100 (Urban & Connected)",
+with c3:
+    st.markdown(
+        f"""
+        <div class="stat-card">
+            <div class="stat-label">💰 State Median Income</div>
+            <div class="stat-value" style="color:#38bdf8;">RM {state_median:,.0f}</div>
+            <span class="stat-badge badge-blue">Disparity: {disparity_ratio:.1f}× (Max/Min)</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-with r2c2:
-    st.markdown('<div class="metric-critical">', unsafe_allow_html=True)
-    st.metric(
-        "🗺️ Maximum Travel Friction",
-        max_geo_dist["district"],
-        f"≈{max_geo_dist['est_travel_time_min']:.0f} min ({max_geo_dist['min_distance_km']:.1f} km)",
-        delta_color="inverse",
-    )
-    st.markdown("</div>", unsafe_allow_html=True)
-
-with r2c3:
-    st.metric(
-        "⚠️ Critical Priority Districts (>60/100)",
-        f"{critical_count} / {len(df)} Districts",
-        f"Immediate mobile screening recommended",
-        delta_color="inverse",
+with c4:
+    st.markdown(
+        f"""
+        <div class="stat-card">
+            <div class="stat-label">🗺️ Max Travel Time</div>
+            <div class="stat-value" style="color:#fbbf24;">{max_geo_dist['est_travel_time_min']:.0f} <span style="font-size:0.82rem; font-weight:600;">MIN</span></div>
+            <span class="stat-badge badge-amber">{max_geo_dist['district']} ({max_geo_dist['min_distance_km']:.0f} km)</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
     )
 
-st.markdown("<br>", unsafe_allow_html=True)
+with c5:
+    st.markdown(
+        f"""
+        <div class="stat-card">
+            <div class="stat-label">⚠️ Critical Districts</div>
+            <div class="stat-value" style="color:#f87171;">{critical_count} <span style="font-size:0.82rem; font-weight:600; color:#94a3b8;">/ {len(df)}</span></div>
+            <span class="stat-badge badge-red">Priority Score &gt; 60.0</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+with c6:
+    st.markdown(
+        f"""
+        <div class="stat-card">
+            <div class="stat-label">🏥 Active Health Hubs</div>
+            <div class="stat-value" style="color:#4ade80;">{len(hospitals)} <span style="font-size:0.82rem; font-weight:600; color:#94a3b8;">HUBS</span></div>
+            <span class="stat-badge badge-green">{len(clinics)} Primary Clinics</span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+st.markdown("<div style='margin-bottom: 0.8rem;'></div>", unsafe_allow_html=True)
 
 # ---------------------------------------------------------------------------
 # MAP VISUALIZATION: OPTION C LAYERED HYBRID (FOLIUM)
 # ---------------------------------------------------------------------------
-st.markdown("## 🗺️ Option C: Layered Hybrid Priority Map (100% Model)")
+st.markdown("## Layered Hybrid Priority Map")
 st.caption(
     "Interactive multi-layer dispatch map. "
     "Circle markers are sized (radius 7–20) and colored by **Final Priority Score (/100)**. "
